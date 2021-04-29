@@ -1,0 +1,43 @@
+﻿@page "/viewstats"
+@using paautoauctionapp.Shared
+@using paautoauctionapp.Shared.ViewModels
+@inject HttpClient Http
+
+<h1>Auto Auction Stats</h1>
+
+@if (viewModel == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <DataGrid TItem="StatViewModel" Data="@viewModel.stats" Filterable="true" PageSize=100 ShowPager="true">
+    <DataGridColumn TItem="StatViewModel" Field="@nameof(StatViewModel.Year)" Caption="Year" Sortable="true" />
+    <DataGridColumn TItem="StatViewModel" Field="@nameof(StatViewModel.Make)" Caption="Make" Sortable="true" />
+    <DataGridColumn TItem="StatViewModel" Field="@nameof(StatViewModel.Model)" Caption="Model" Sortable="true" />
+    <DataGridColumn TItem="StatViewModel" Field="@nameof(StatViewModel.MileageBoundDescription)" Caption="Mileage" />
+    <DataGridColumn TItem="StatViewModel" Field="@nameof(StatViewModel.SampleSize)" Caption="Sample Size"
+        Sortable="true" />
+    <DataGridColumn TItem="StatViewModel" Field="@nameof(StatViewModel.MinSalePrice)" Caption="Minimum Price"
+        Sortable="true" />
+    <DataGridColumn TItem="StatViewModel" Field="@nameof(StatViewModel.MeanSalePrice)" Caption="Average Price"
+        Sortable="true" />
+    <DataGridColumn TItem="StatViewModel" Field="@nameof(StatViewModel.MaxSalePrice)" Caption="Maximum Price"
+        Sortable="true" />
+    <DataGridColumn TItem="StatViewModel" Field="@nameof(StatViewModel.LowStandardDev)" Caption="Low St. Dev."
+        Sortable="true" />
+    <DataGridColumn TItem="StatViewModel" Field="@nameof(StatViewModel.StandardDevHigh50)" Caption="50% High St. Dev."
+        Sortable="true" />
+    <DataGridColumn TItem="StatViewModel" Field="@nameof(StatViewModel.HighStandardDev)" Caption="High St. Dev."
+        Sortable="true" />
+</DataGrid>
+}
+
+@code {
+    private StatsViewModel viewModel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        viewModel = await Http.GetFromJsonAsync<StatsViewModel>("Stats");
+    }
+}
